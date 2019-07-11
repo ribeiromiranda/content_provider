@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 class FlutterPlugin {
   static const MethodChannel _channel = const MethodChannel('flutter_plugin');
 
-  static Future<List<Map<String, dynamic>>> getContentValue(String uri) async {
+  static Future<List<Map<dynamic, dynamic>>> getContentValue(String uri) async {
     var parameters = {'uri': '$uri'};
     List<dynamic> data =
         await _channel.invokeMethod('getContent', Map.from(parameters));
