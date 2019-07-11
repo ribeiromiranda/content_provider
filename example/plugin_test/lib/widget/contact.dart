@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_plugin/flutter_plugin.dart';
 import 'package:provider/provider.dart';
 import 'package:plugin_test/bloc/contactBloc.dart';
 import 'package:plugin_test/model/contact.dart';

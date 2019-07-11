@@ -14,14 +14,15 @@ class ContactBloc {
   }
 
   void _getContacts() async {
-    List<Map<String, dynamic>> contactMaps =
+    List<Map<dynamic, dynamic>> contactMaps =
         await FlutterPlugin.getContentValue(
             "content://com.android.contacts/data/");
 
     List<Contact> contacts = List();
 
     contactMaps.forEach((contact) {
-      contacts.add(Contact(name: contact['data1'], number: contact['data4']));
+      print("contat is$contact");
+      contacts.add(Contact(name: contact["data1"], number: contact["data4"]));
     });
     contactStreamController.sink.add(contacts);
   }
