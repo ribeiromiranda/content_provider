@@ -84,24 +84,26 @@ class FlutterPlugin() : MethodCallHandler {
                 }.subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            val data = mutableListOf<HashMap<String, Any>>()
-                            while (it.moveToNext()) {
-                                val value = HashMap<String, Any>()
-                                for (index in 0..it.columnCount) {
-                                    val type = it.getType(index)
-                                    when (type) {
-                                        /*int */1 -> value[it.getColumnName(index)] = it.getInt(index)
-                                        /*float */ 2 -> value[it.getColumnName(index)] = it.getFloat(index)
-                                        /*string */3 -> value[it.getColumnName(index)] = it.getString(index)
-                                        /*blob */4 -> value[it.getColumnName(index)] = it.getBlob(index)
-                                        else -> {
+                            it?.apply {
+                                val data = mutableListOf<HashMap<String, Any>>()
+                                while (it.moveToNext()) {
+                                    val value = HashMap<String, Any>()
+                                    for (index in 0..it.columnCount) {
+                                        val type = it.getType(index)
+                                        when (type) {
+                                            /*int */1 -> value[it.getColumnName(index)] = it.getInt(index)
+                                            /*float */ 2 -> value[it.getColumnName(index)] = it.getFloat(index)
+                                            /*string */3 -> value[it.getColumnName(index)] = it.getString(index)
+                                            /*blob */4 -> value[it.getColumnName(index)] = it.getBlob(index)
+                                            else -> {
+                                            }
                                         }
                                     }
+                                    data.add(value)
                                 }
-                                data.add(value)
+                                result.success(data)
+                                query?.close()
                             }
-                            result.success(data)
-                            query?.close()
                         }, {
                             it.printStackTrace()
                             query?.close()
