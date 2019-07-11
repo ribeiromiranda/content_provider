@@ -1,9 +1,12 @@
 package com.solutelabs.flutter_plugin
 
 import android.app.Activity
+import android.app.Application
+import android.app.Application.ActivityLifecycleCallbacks
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
+import android.os.Bundle
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -11,16 +14,51 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.lang.Exception
 
 class FlutterPlugin() : MethodCallHandler {
     var activity: Activity? = null
     var channel: MethodChannel? = null
+    var compositeDisposable = CompositeDisposable()
+    private var activityLifecycleCallbacks: ActivityLifecycleCallbacks? = null
 
     constructor(activity: Activity, channel: MethodChannel) : this() {
         this.activity = activity
         this.channel = channel
         this.channel?.setMethodCallHandler(this)
+
+        this.activityLifecycleCallbacks = object : ActivityLifecycleCallbacks {
+            override fun onActivityPaused(activity: Activity?) {
+
+            }
+
+            override fun onActivityResumed(activity: Activity?) {
+
+            }
+
+            override fun onActivityStarted(activity: Activity?) {
+
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
+
+            }
+
+            override fun onActivityStopped(activity: Activity?) {
+
+            }
+
+            override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+
+            }
+
+            override fun onActivityDestroyed(activity: Activity?) {
+                compositeDisposable.dispose()
+            }
+
+        }
     }
 
     companion object {
@@ -46,12 +84,28 @@ class FlutterPlugin() : MethodCallHandler {
                 }.subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
-                            result.success(it)
+                            val data = HashMap<String, Any>()
+                            while (it.moveToNext()) {
+                                for (index in 0..it.columnCount) {
+                                    val type = it.getType(index)
+                                    when (type) {
+                                        /*int */1 -> data[it.getColumnName(index)] = it.getInt(index)
+                                        /*float */ 2 -> data[it.getColumnName(index)] = it.getFloat(index)
+                                        /*string */3 -> data[it.getColumnName(index)] = it.getString(index)
+                                        /*blob */4 -> data[it.getColumnName(index)] = it.getBlob(index)
+                                        else -> {
+                                        }
+                                    }
+                                }
+                            }
+                            result.success(data)
                             query?.close()
                         }, {
                             it.printStackTrace()
                             query?.close()
-                        })
+                        }).apply {
+                            compositeDisposable.add(this)
+                        }
             }
 
             call.method == "insertContent" -> {
@@ -64,7 +118,9 @@ class FlutterPlugin() : MethodCallHandler {
                             result.success(it)
                         }, {
                             it.printStackTrace()
-                        })
+                        }).apply {
+                            compositeDisposable.add(this)
+                        }
 
             }
 
@@ -81,7 +137,9 @@ class FlutterPlugin() : MethodCallHandler {
                             result.success(it)
                         }, {
                             it.printStackTrace()
-                        })
+                        }).apply {
+                            compositeDisposable.add(this)
+                        }
             }
 
             call.method == "deleteContent" -> {
@@ -96,7 +154,9 @@ class FlutterPlugin() : MethodCallHandler {
                             result.success(it)
                         }, {
                             it.printStackTrace()
-                        })
+                        }).apply {
+                            compositeDisposable.add(this)
+                        }
             }
             else -> result.notImplemented()
         }
