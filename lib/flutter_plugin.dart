@@ -7,8 +7,9 @@ class FlutterPlugin {
 
   static Future<List<Map<String, dynamic>>> getContentValue(String uri) async {
     var parameters = {'uri': '$uri'};
-    List<dynamic> data = await _channel.invokeMethod('getContent', Map.from(parameters));
-    return data as List<Map<String, dynamic>>;
+    List<dynamic> data =
+        await _channel.invokeMethod('getContent', Map.from(parameters));
+    return data.cast<Map<String, dynamic>>();
   }
 
   static Future<List<Map<String, dynamic>>> insertContentValue(
