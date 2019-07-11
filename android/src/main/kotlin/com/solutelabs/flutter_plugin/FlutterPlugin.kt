@@ -104,7 +104,7 @@ class FlutterPlugin() : MethodCallHandler {
                                     } while (moveToNext())
                                 }
                                 Log.d("contact is ", ":$data")
-                                result.success(data)
+                                result.success(data.toList())
                                 query?.close()
                             }
                         }, {
