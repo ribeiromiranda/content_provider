@@ -7,6 +7,8 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -72,39 +74,41 @@ class FlutterPlugin() : MethodCallHandler {
     override fun onMethodCall(call: MethodCall, result: Result) {
         when {
             call.method == "getContent" -> {
-                val uri = call.argument<String>("uri")
-                val projection = call.argument<Array<String>>("arguments")
-                val selection = call.argument<String>("selection")
-                val selectionArguments = call.argument<Array<String>>("selectionArguments")
-                val sortOrder = call.argument<String>("sortOrder")
+                val map = call.arguments as java.util.HashMap<String, String>
+                Log.d("map is ", ":$map")
                 var query: Cursor? = null
                 Observable.fromCallable {
-                    query = activity?.contentResolver?.query(Uri.parse(uri), projection, selection, selectionArguments, sortOrder)
+                    query = activity?.contentResolver?.query(Uri.parse(map["uri"]), null, null, null, null)
                     query
                 }.subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             it?.apply {
+                                Log.d("cursor is ", ":$this")
                                 val data = mutableListOf<HashMap<String, Any>>()
-                                while (it.moveToNext()) {
-                                    val value = HashMap<String, Any>()
-                                    for (index in 0..it.columnCount) {
-                                        val type = it.getType(index)
-                                        when (type) {
-                                            /*int */1 -> value[it.getColumnName(index)] = it.getInt(index)
-                                            /*float */ 2 -> value[it.getColumnName(index)] = it.getFloat(index)
-                                            /*string */3 -> value[it.getColumnName(index)] = it.getString(index)
-                                            /*blob */4 -> value[it.getColumnName(index)] = it.getBlob(index)
-                                            else -> {
+                                if (this.moveToFirst()) {
+                                    do {
+                                        val value = HashMap<String, Any>()
+                                        for (index in 0..it.columnCount) {
+                                            val type = it.getType(index)
+                                            when (type) {
+                                                /*int */1 -> value[it.getColumnName(index)] = it.getInt(index)
+                                                /*float */ 2 -> value[it.getColumnName(index)] = it.getFloat(index)
+                                                /*string */3 -> value[it.getColumnName(index)] = it.getString(index)
+                                                /*blob */4 -> value[it.getColumnName(index)] = it.getBlob(index)
+                                                else -> {
+                                                }
                                             }
                                         }
-                                    }
-                                    data.add(value)
+                                        data.add(value)
+                                    } while (moveToNext())
                                 }
+                                Log.d("contact is ", ":$data")
                                 result.success(data)
                                 query?.close()
                             }
                         }, {
+                            Log.d("error is ", ":${it.message}")
                             it.printStackTrace()
                             query?.close()
                         }).apply {
@@ -134,7 +138,7 @@ class FlutterPlugin() : MethodCallHandler {
                 val whereArgs = call.argument<Array<String>>("whereArgs")
 
                 Observable.fromCallable {
-                    activity?.contentResolver?.update(Uri.parse(uri), getContentValues(call, result), where,whereArgs)
+                    activity?.contentResolver?.update(Uri.parse(uri), getContentValues(call, result), where, whereArgs)
                 }.subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({

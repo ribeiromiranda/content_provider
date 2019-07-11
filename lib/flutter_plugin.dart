@@ -6,8 +6,9 @@ class FlutterPlugin {
   static const MethodChannel _channel = const MethodChannel('flutter_plugin');
 
   static Future<List<Map<String, dynamic>>> getContentValue(String uri) async {
-    final List<Map<String, dynamic>> data =
-        await _channel.invokeMethod('getContent', [uri]);
+    var parameters = {'uri': '$uri'};
+    List<Map<String, dynamic>> data = await _channel.invokeMethod(
+        'getContent', Map.from(parameters)) as List<Map<String, dynamic>>;
     return data;
   }
 
@@ -28,10 +29,9 @@ class FlutterPlugin {
     return data;
   }
 
-  static Future<List<Map<String, dynamic>>> deleteContentValue(
-      String uri, dynamic data, String where, List<String> selectionArgs) async {
-    await _channel
-        .invokeMethod('deleteContent', [uri, where, selectionArgs]);
+  static Future<List<Map<String, dynamic>>> deleteContentValue(String uri,
+      dynamic data, String where, List<String> selectionArgs) async {
+    await _channel.invokeMethod('deleteContent', [uri, where, selectionArgs]);
     return data;
   }
 }
