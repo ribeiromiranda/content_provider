@@ -73,7 +73,6 @@ class FlutterPlugin() : MethodCallHandler {
         when (call.method) {
             "getContent" -> {
                 val map = call.arguments as java.util.HashMap<String, String>
-                Log.d("map is ", ":$map")
                 var query: Cursor? = null
                 Observable.fromCallable {
                     query = activity?.contentResolver?.query(Uri.parse(map["uri"]), null, null, null, null)
@@ -99,12 +98,10 @@ class FlutterPlugin() : MethodCallHandler {
                                         data.add(value)
                                     } while (moveToNext())
                                 }
-                                Log.d("contact is ", ":$data")
                                 result.success(data.toList())
                                 query?.close()
                             }
                         }, {
-                            Log.d("error is ", ":${it.message}")
                             it.printStackTrace()
                             result.error("1", it.message, "")
                             query?.close()
