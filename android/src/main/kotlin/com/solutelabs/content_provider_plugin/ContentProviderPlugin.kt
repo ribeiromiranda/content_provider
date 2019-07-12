@@ -1,4 +1,4 @@
-package com.solutelabs.flutter_plugin
+package com.solutelabs.content_provider_plugin
 
 import android.app.Activity
 import android.app.Application.ActivityLifecycleCallbacks
@@ -6,7 +6,6 @@ import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -18,7 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 @Suppress("MoveVariableDeclarationIntoWhen", "UNCHECKED_CAST")
-class FlutterPlugin() : MethodCallHandler {
+class ContentProviderPlugin() : MethodCallHandler {
     var activity: Activity? = null
     var channel: MethodChannel? = null
     var compositeDisposable = CompositeDisposable()
@@ -65,7 +64,7 @@ class FlutterPlugin() : MethodCallHandler {
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(), "flutter_plugin")
-            channel.setMethodCallHandler(FlutterPlugin(registrar.activity(), channel))
+            channel.setMethodCallHandler(ContentProviderPlugin(registrar.activity(), channel))
         }
     }
 

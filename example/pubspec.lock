@@ -29,6 +29,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.11"
+  content_provider:
+    dependency: "direct dev"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -41,15 +48,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_plugin:
-    dependency: "direct dev"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: ccf60ca387018c4257aba7a54d33e18fcdf3f54d
-      url: "https://github.com/deep-stl/flutter_plugin"
-    source: git
-    version: "0.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter

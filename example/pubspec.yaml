@@ -16,9 +16,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_plugin:
-    git:
-      url: https://github.com/deep-stl/flutter_plugin
+  content_provider:
+    path: ../
   provider: 3.0.0+1
   simple_permissions: "^0.1.2"
 
