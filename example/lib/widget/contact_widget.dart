@@ -21,14 +21,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class ContactListWidget extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return ContactListState();
-  }
-}
-
-class ContactListState extends State<ContactListWidget> {
+class ContactListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ContactBloc contactBloc = Provider.of<ContactBloc>(context);
