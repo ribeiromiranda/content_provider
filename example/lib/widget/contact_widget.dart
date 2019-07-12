@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_plugin_example/bloc/contactBloc.dart';
+import 'package:flutter_plugin_example/bloc/contact_bloc.dart';
 import 'package:flutter_plugin_example/model/contact.dart';
 
 class MyApp extends StatelessWidget {
