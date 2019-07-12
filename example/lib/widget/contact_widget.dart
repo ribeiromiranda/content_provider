@@ -12,11 +12,20 @@ class MyApp extends StatelessWidget {
           title: Text("Contacts"),
         ),
         body: Provider<ContactBloc>(
-          builder: (context) => ContactBloc(),
-          dispose: (context, bloc) => bloc.dispose(),
-          child: ContactListWidget(),
-        ),
+            builder: (context) => ContactBloc(),
+            dispose: (context, bloc) => bloc.dispose(),
+            child: GroupWidget()),
       ),
+    );
+  }
+}
+
+class GroupWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[ContactListWidget(), EmptyWidget()],
     );
   }
 }
@@ -31,6 +40,7 @@ class ContactListWidget extends StatelessWidget {
         if (contacts.hasData) {
           if (contacts.data.isNotEmpty) {
             return ListView.builder(
+                shrinkWrap: true,
                 itemCount: contacts.data.length,
                 itemBuilder: (context, index) {
                   return ListTile(
@@ -50,5 +60,33 @@ class ContactListWidget extends StatelessWidget {
         }
       },
     );
+  }
+}
+
+class EmptyWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return EmptyState();
+  }
+}
+
+class EmptyState extends State<EmptyWidget> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final ContactBloc contactBloc = Provider.of<ContactBloc>(context);
+    contactBloc.getMsgStream().listen((msg) {
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

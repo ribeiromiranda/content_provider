@@ -5,26 +5,35 @@ import 'package:simple_permissions/simple_permissions.dart';
 
 class ContactBloc {
   StreamController<List<Contact>> contactStreamController = StreamController();
+  StreamController<String> showMsgController = StreamController();
 
   Stream<List<Contact>> getContactsStream() {
     return contactStreamController.stream;
   }
 
-  ContactBloc(){
-    _checkPermission();
+  Stream<String> getMsgStream(){
+    return showMsgController.stream;
   }
 
-  void _checkPermission() async {
+  ContactBloc() {
+    _checkPermission().then((isGranted) {
+      if (isGranted) {
+        _getContacts();
+      } else {
+        showMsgController.sink.add("Permission is required for contacts");
+      }
+    });
+  }
+
+  Future<bool> _checkPermission() async {
     var isGranted =
-    await SimplePermissions.checkPermission(Permission.ReadContacts);
+        await SimplePermissions.checkPermission(Permission.ReadContacts);
     if (!isGranted) {
       var result =
-      await SimplePermissions.requestPermission(Permission.ReadContacts);
-      if (result == PermissionStatus.authorized) {
-        _getContacts();
-      }
-    }else{
-      _getContacts();
+          await SimplePermissions.requestPermission(Permission.ReadContacts);
+      return result == PermissionStatus.authorized;
+    } else {
+      return true;
     }
   }
 
@@ -45,5 +54,6 @@ class ContactBloc {
 
   void dispose() {
     contactStreamController.close();
+    showMsgController.close();
   }
 }
