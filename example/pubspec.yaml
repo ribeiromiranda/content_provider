@@ -20,6 +20,7 @@ dev_dependencies:
     git:
       url: https://github.com/deep-stl/flutter_plugin
   provider: 3.0.0+1
+  simple_permissions: "^0.1.2"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -46,7 +46,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "11a5b230cbf09c6dd07ef26798d7a4d32e0a1d04"
+      resolved-ref: ccf60ca387018c4257aba7a54d33e18fcdf3f54d
       url: "https://github.com/deep-stl/flutter_plugin"
     source: git
     version: "0.0.1"
@@ -97,6 +97,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.3"
+  simple_permissions:
+    dependency: "direct dev"
+    description:
+      name: simple_permissions
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.9"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -160,3 +167,4 @@ packages:
     version: "2.0.8"
 sdks:
   dart: ">=2.2.2 <3.0.0"
+  flutter: ">=0.1.4 <2.0.0"

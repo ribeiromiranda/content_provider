@@ -9,11 +9,7 @@ class ContactBloc {
     return contactStreamController.stream;
   }
 
-  ContactBloc() {
-    _getContacts();
-  }
-
-  void _getContacts() async {
+  void getContacts() async {
     List<Map<dynamic, dynamic>> contactMaps =
         await FlutterPlugin.getContentValue(
             "content://com.android.contacts/data/");
@@ -22,11 +18,8 @@ class ContactBloc {
 
     contactMaps.forEach((contact) {
       print("contat is$contact");
-
-      if (contact["data4"] != null) {
-        contacts.add(Contact(
-            name: contact["display_name"], number: contact["data4"] ?? ""));
-      }
+      contacts.add(Contact(
+          name: contact["display_name"], number: contact["data4"] ?? ""));
     });
     contactStreamController.sink.add(contacts);
   }
