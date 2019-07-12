@@ -8,6 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(title: Text("Contacts"),),
         body: Provider<ContactBloc>(
           builder: (context) => ContactBloc(),
           dispose: (context, bloc) => bloc.dispose(),

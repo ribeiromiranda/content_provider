@@ -1,14 +1,12 @@
 package com.solutelabs.flutter_plugin
 
 import android.app.Activity
-import android.app.Application
 import android.app.Application.ActivityLifecycleCallbacks
 import android.content.ContentValues
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -18,8 +16,8 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.lang.Exception
 
+@Suppress("MoveVariableDeclarationIntoWhen", "UNCHECKED_CAST")
 class FlutterPlugin() : MethodCallHandler {
     var activity: Activity? = null
     var channel: MethodChannel? = null
@@ -72,26 +70,24 @@ class FlutterPlugin() : MethodCallHandler {
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        when {
-            call.method == "getContent" -> {
+        when (call.method) {
+            "getContent" -> {
                 val map = call.arguments as java.util.HashMap<String, String>
                 Log.d("map is ", ":$map")
                 var query: Cursor? = null
                 Observable.fromCallable {
                     query = activity?.contentResolver?.query(Uri.parse(map["uri"]), null, null, null, null)
                     query
-                }.subscribeOn(Schedulers.newThread())
+                }.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             it?.apply {
-                                Log.d("cursor is ", ":$this")
                                 val data = mutableListOf<HashMap<String, Any>>()
                                 if (this.moveToFirst()) {
                                     do {
                                         val value = HashMap<String, Any>()
                                         for (index in 0..it.columnCount) {
-                                            val type = it.getType(index)
-                                            when (type) {
+                                            when (it.getType(index)) {
                                                 /*int */1 -> value[it.getColumnName(index)] = it.getInt(index)
                                                 /*float */ 2 -> value[it.getColumnName(index)] = it.getFloat(index)
                                                 /*string */3 -> value[it.getColumnName(index)] = it.getString(index)
@@ -110,31 +106,31 @@ class FlutterPlugin() : MethodCallHandler {
                         }, {
                             Log.d("error is ", ":${it.message}")
                             it.printStackTrace()
-                            result.error("1","something went wrong","")
+                            result.error("1", it.message, "")
                             query?.close()
                         }).apply {
                             compositeDisposable.add(this)
                         }
             }
 
-            call.method == "insertContent" -> {
+            "insertContent" -> {
                 val uri = call.argument<String>("uri")
                 Observable.fromCallable {
                     activity?.contentResolver?.insert(Uri.parse(uri), getContentValues(call, result))
-                }.subscribeOn(Schedulers.newThread())
+                }.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             result.success(it)
                         }, {
                             it.printStackTrace()
-                            result.error("1","something went wrong","")
+                            result.error("1", it.message, "")
                         }).apply {
                             compositeDisposable.add(this)
                         }
 
             }
 
-            call.method == "updateContent" -> {
+            "updateContent" -> {
                 val uri = call.argument<String>("uri")
                 val where = call.argument<String>("where")
                 val whereArgs = call.argument<Array<String>>("whereArgs")
@@ -147,25 +143,25 @@ class FlutterPlugin() : MethodCallHandler {
                             result.success(it)
                         }, {
                             it.printStackTrace()
-                            result.error("1","something went wrong","")
+                            result.error("1", it.message, "")
                         }).apply {
                             compositeDisposable.add(this)
                         }
             }
 
-            call.method == "deleteContent" -> {
+            "deleteContent" -> {
                 val uri = call.argument<String>("uri")
                 val where = call.argument<String>("where")
                 val selectionArgs = call.argument<Array<String>>("selectionArgs")
                 Observable.fromCallable {
                     activity?.contentResolver?.delete(Uri.parse(uri), where, selectionArgs)
-                }.subscribeOn(Schedulers.newThread())
+                }.subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({
                             result.success(it)
                         }, {
                             it.printStackTrace()
-                            result.error("1","something went wrong","")
+                            result.error("1", it.message, "")
                         }).apply {
                             compositeDisposable.add(this)
                         }
