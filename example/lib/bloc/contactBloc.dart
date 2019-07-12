@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:plugin_test/model/contact.dart';
+import 'package:flutter_plugin_example/model/contact.dart';
 import 'package:flutter_plugin/flutter_plugin.dart';
 
 class ContactBloc {

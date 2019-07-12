@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:plugin_test/bloc/contactBloc.dart';
-import 'package:plugin_test/model/contact.dart';
+import 'package:flutter_plugin_example/bloc/contactBloc.dart';
+import 'package:flutter_plugin_example/model/contact.dart';
 
 class MyApp extends StatelessWidget {
   @override

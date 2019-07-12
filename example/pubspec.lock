@@ -44,9 +44,11 @@ packages:
   flutter_plugin:
     dependency: "direct dev"
     description:
-      path: ".."
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "11a5b230cbf09c6dd07ef26798d7a4d32e0a1d04"
+      url: "https://github.com/deep-stl/flutter_plugin"
+    source: git
     version: "0.0.1"
   flutter_test:
     dependency: "direct dev"
@@ -81,6 +83,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+  provider:
+    dependency: "direct dev"
+    description:
+      name: provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0+1"
   quiver:
     dependency: transitive
     description:
