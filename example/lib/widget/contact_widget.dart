@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_plugin_example/bloc/contact_bloc.dart';
 import 'package:flutter_plugin_example/model/contact.dart';
+import 'dart:async';
 
 class MyApp extends StatelessWidget {
   @override
@@ -25,7 +26,7 @@ class GroupWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[ContactListWidget(), EmptyWidget()],
+      children: <Widget>[ContactListWidget(), SnackBarWidget()],
     );
   }
 }
@@ -63,19 +64,21 @@ class ContactListWidget extends StatelessWidget {
   }
 }
 
-class EmptyWidget extends StatefulWidget {
+class SnackBarWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return EmptyState();
+    return SnackBarState();
   }
 }
 
-class EmptyState extends State<EmptyWidget> {
+class SnackBarState extends State<SnackBarWidget> {
+  StreamSubscription subscription;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final ContactBloc contactBloc = Provider.of<ContactBloc>(context);
-    contactBloc.getMsgStream().listen((msg) {
+    subscription ??= contactBloc.getMsgStream().listen((msg) {
       Scaffold.of(context).showSnackBar(SnackBar(content: Text(msg)));
     });
   }
@@ -83,6 +86,12 @@ class EmptyState extends State<EmptyWidget> {
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   @override

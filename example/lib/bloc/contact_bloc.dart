@@ -4,15 +4,15 @@ import 'package:flutter_plugin/flutter_plugin.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 
 class ContactBloc {
-  StreamController<List<Contact>> contactStreamController = StreamController();
-  StreamController<String> showMsgController = StreamController();
+  StreamController<List<Contact>> _contactStreamController = StreamController();
+  StreamController<String> _showMsgController = StreamController();
 
   Stream<List<Contact>> getContactsStream() {
-    return contactStreamController.stream;
+    return _contactStreamController.stream;
   }
 
   Stream<String> getMsgStream(){
-    return showMsgController.stream;
+    return _showMsgController.stream;
   }
 
   ContactBloc() {
@@ -20,7 +20,7 @@ class ContactBloc {
       if (isGranted) {
         _getContacts();
       } else {
-        showMsgController.sink.add("Permission is required for contacts");
+        _showMsgController.sink.add("Permission is required for contacts");
       }
     });
   }
@@ -49,11 +49,11 @@ class ContactBloc {
       contacts.add(Contact(
           name: contact["display_name"], number: contact["data4"] ?? ""));
     });
-    contactStreamController.sink.add(contacts);
+    _contactStreamController.sink.add(contacts);
   }
 
   void dispose() {
-    contactStreamController.close();
-    showMsgController.close();
+    _contactStreamController.close();
+    _showMsgController.close();
   }
 }
