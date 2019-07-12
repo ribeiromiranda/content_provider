@@ -7,24 +7,39 @@ class FlutterPlugin {
 
   static Future<List<Map<dynamic, dynamic>>> getContentValue(String uri) async {
     var parameters = {'uri': '$uri'};
+    if (!_isValidUri(uri)) {
+      throw Exception("invalid data");
+    }
     List<dynamic> data =
         await _channel.invokeMethod('getContent', Map.from(parameters));
     return data.cast<Map<dynamic, dynamic>>();
   }
 
-  static Future<void> insertContentValue(
-      String uri, dynamic data) async {
+  static Future<void> insertContentValue(String uri, dynamic data) async {
     var parameters = {'uri': '$uri'};
+    if (!_isValidUri(uri) || data == null) {
+      throw Exception("invalid data");
+    }
     final Map<String, dynamic> contentValues = Map();
     contentValues.putIfAbsent("contentValues", () => data);
-   await _channel.invokeMethod(
+    await _channel.invokeMethod(
         'insertContent', [Map.from(parameters), Map.from(contentValues)]);
   }
 
-  static Future<void> updateContentValue(
-      String uri, dynamic data, String where, List<String> whereArgs) async {
+  static Future<void> updateContentValue(String uri, dynamic data,
+      {String where, List<String> whereArgs}) async {
     var parameters = {'uri': '$uri'};
     var whereParam = {'where': '$where'};
+
+    if (!_isValidUri(uri) || data == null) {
+      throw Exception("invalid data");
+    }
+    if (where != null && where.isEmpty) {
+      throw Exception("invalid data");
+    }
+    if (whereArgs != null && whereArgs.isEmpty) {
+      throw Exception("invalid data");
+    }
 
     final Map<String, dynamic> contentValues = Map();
     contentValues.putIfAbsent("contentValues", () => data);
@@ -34,12 +49,25 @@ class FlutterPlugin {
         [Map.from(parameters), contentValues, Map.from(whereParam), whereArg]);
   }
 
-  static Future<void> deleteContentValue(String uri,
-      dynamic data, String where, List<String> selectionArgs) async {
+  static Future<void> deleteContentValue(String uri, dynamic data, String where,
+      List<String> selectionArgs) async {
+
+    if (!_isValidUri(uri) || data == null) {
+      throw Exception("invalid data");
+    }
+    if (where != null && where.isEmpty) {
+      throw Exception("invalid data");
+    }
+    if (selectionArgs != null && selectionArgs.isEmpty) {
+      throw Exception("invalid data");
+    }
     var parameters = {'uri': '$uri'};
     var whereParam = {'where': '$where'};
     final Map<String, dynamic> selectionArg = Map();
     selectionArg.putIfAbsent("whereArgs", () => selectionArgs);
-    await _channel.invokeMethod('deleteContent', [Map.from(parameters), Map.from(whereParam), selectionArg]);
+    await _channel.invokeMethod('deleteContent',
+        [Map.from(parameters), Map.from(whereParam), selectionArg]);
   }
+
+  static bool _isValidUri(String uri) => (uri != null && uri.isNotEmpty);
 }
