@@ -14,24 +14,35 @@ class FlutterPlugin {
 
   static Future<List<Map<String, dynamic>>> insertContentValue(
       String uri, dynamic data) async {
+    var parameters = {'uri': '$uri'};
     final Map<String, dynamic> contentValues = Map();
     contentValues.putIfAbsent("contentValues", () => data);
-    await _channel.invokeMethod('insertContent', [uri, contentValues]);
+    await _channel.invokeMethod(
+        'insertContent', [Map.from(parameters), Map.from(contentValues)]);
     return data;
   }
 
   static Future<List<Map<String, dynamic>>> updateContentValue(
       String uri, dynamic data, String where, List<String> whereArgs) async {
+    var parameters = {'uri': '$uri'};
+    var whereParam = {'where': '$where'};
+
     final Map<String, dynamic> contentValues = Map();
     contentValues.putIfAbsent("contentValues", () => data);
-    await _channel
-        .invokeMethod('updateContent', [uri, contentValues, where, whereArgs]);
+    final Map<String, dynamic> whereArg = Map();
+    whereArg.putIfAbsent("whereArgs", () => whereArgs);
+    await _channel.invokeMethod('updateContent',
+        [Map.from(parameters), contentValues, Map.from(whereParam), whereArg]);
     return data;
   }
 
   static Future<List<Map<String, dynamic>>> deleteContentValue(String uri,
       dynamic data, String where, List<String> selectionArgs) async {
-    await _channel.invokeMethod('deleteContent', [uri, where, selectionArgs]);
+    var parameters = {'uri': '$uri'};
+    var whereParam = {'where': '$where'};
+    final Map<String, dynamic> selectionArg = Map();
+    selectionArg.putIfAbsent("whereArgs", () => selectionArgs);
+    await _channel.invokeMethod('deleteContent', [Map.from(parameters), Map.from(whereParam), selectionArg]);
     return data;
   }
 }

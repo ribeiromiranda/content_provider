@@ -110,6 +110,7 @@ class FlutterPlugin() : MethodCallHandler {
                         }, {
                             Log.d("error is ", ":${it.message}")
                             it.printStackTrace()
+                            result.error("1","something went wrong","")
                             query?.close()
                         }).apply {
                             compositeDisposable.add(this)
@@ -126,6 +127,7 @@ class FlutterPlugin() : MethodCallHandler {
                             result.success(it)
                         }, {
                             it.printStackTrace()
+                            result.error("1","something went wrong","")
                         }).apply {
                             compositeDisposable.add(this)
                         }
@@ -145,6 +147,7 @@ class FlutterPlugin() : MethodCallHandler {
                             result.success(it)
                         }, {
                             it.printStackTrace()
+                            result.error("1","something went wrong","")
                         }).apply {
                             compositeDisposable.add(this)
                         }
@@ -162,6 +165,7 @@ class FlutterPlugin() : MethodCallHandler {
                             result.success(it)
                         }, {
                             it.printStackTrace()
+                            result.error("1","something went wrong","")
                         }).apply {
                             compositeDisposable.add(this)
                         }
