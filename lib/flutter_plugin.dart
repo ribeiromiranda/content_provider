@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 
 import 'dart:io';
 
-class FlutterPlugin {
+class ContentProviderPlugin {
   static const MethodChannel _channel = const MethodChannel('flutter_plugin');
 
   static Future<List<Map<dynamic, dynamic>>> getContentValue(String uri) async {
