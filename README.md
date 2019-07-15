@@ -1,4 +1,4 @@
-a flutter plugin for providing similar feature like content provider in android.
+Flutter plugin for providing similar feature like content provider in android.
 
 <b>features</b>:<br>
 1)Retrive data <br>
