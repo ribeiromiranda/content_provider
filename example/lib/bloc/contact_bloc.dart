@@ -45,7 +45,6 @@ class ContactBloc {
     List<Contact> contacts = List();
 
     contactMaps.forEach((contact) {
-      print("contat is$contact");
       contacts.add(Contact(
           name: contact["display_name"], number: contact["data4"] ?? ""));
     });

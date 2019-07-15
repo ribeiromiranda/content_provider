@@ -1,16 +1,26 @@
-# flutter_plugin_example
+# content_provider_plugin example
 
-Demonstrates how to use the flutter_plugin plugin.
+Demonstrates how to use the content_provider plugin.
 
-## Getting Started
+1)get contacts from android app in your flutter app.
 
-This project is a starting point for a Flutter application.
+i am using bloc pattern so below is the example of getting all contacts from android contact app.
 
-A few resources to get you started if this is your first Flutter project:
+ void _getContacts() async {
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+    //content://com.android.contacts/data/ :-is the uri of contact app database in android.
+    List<Map<dynamic, dynamic>> contactMaps =
+        await ContentProviderPlugin.getContentValue(
+            "content://com.android.contacts/data/");
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    List<Contact> contacts = List();
+
+    contactMaps.forEach((contact) {
+    //"display_name" is the database field of name of contact
+    //"data4 is the database filed of number of contact.
+      contacts.add(Contact(
+          name: contact["display_name"], number: contact["data4"] ?? ""));
+    });
+    _contactStreamController.sink.add(contacts);
+  }
+
