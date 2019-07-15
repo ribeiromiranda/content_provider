@@ -1,8 +1,9 @@
 name: content_provider
 description: plugin for getting data from other app in android.
 version: 0.0.1
-author:
-homepage:
+authors:
+  - Deep Naik <deep.n@solutelabs.com>
+homepage: https://github.com/deep-stl/content_provider
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_plugin_example/model/contact.dart';
-import 'package:content_provider/content_provider_plugin.dart';
+import 'package:content_provider/content_provider.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 
 class ContactBloc {
