@@ -18,8 +18,11 @@ uri:-Simply pass uri of where you want to update data<br>
 data:-second parameter data is the data you want to update<br>
 optional param:-<br>
 where,whereargs
-<b>4)remove data:</b> <br>deleteContentValue(String uri, dynamic data, String where,
+<b><br>4)remove data:</b> <br>deleteContentValue(String uri, dynamic data, String where,
       List<String> selectionArgs
  uri:-Simply pass uri of where you want to remove data<br>
 data:-second parameter data is the data you want to remove<br>  
   
+<b>Example</b>:-<link>https://github.com/deep-stl/content_provider/tree/master/example/lib</link>
+
+<b>Permissions</b>:-Permissions are not handle by plugin.users need to handle run time permission.
